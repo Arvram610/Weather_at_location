@@ -1,5 +1,5 @@
 {
-  "coords": [10,10],
+  "coords": [58.588511518238825, 16.205263994300015],
 
-  "conditions": ["Lufttemperatur_H", "Vindhastighet", "Vindriktning"]
+  "conditions": ["Lufttemperatur_H", "Vindhastighet", "Vindriktning", "Rådande väder", "Total molnmängd"]
 }

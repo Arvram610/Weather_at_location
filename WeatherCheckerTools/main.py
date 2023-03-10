@@ -1,16 +1,19 @@
 """ A class that gets most accurate weather information based on location and specifications"""
-import urllib
-from typing import Optional
-from urllib.request import urlopen
+import argparse
 import json
+import urllib
+from typing import Optional, List
+from urllib.request import urlopen
+
 import geopy.distance
 
-from decode_weather import decoder
-from key_conds import condition_to_key, key_to_conditions
+from WeatherCheckerTools.decode_weather import decoder
+from WeatherCheckerTools.key_conds import condition_to_key, key_to_conditions
 
 
 class WeatherHere:
     """ The class in question"""
+
     def __init__(self):
         self.__coords = None
         self.__condition_keys = None
@@ -18,16 +21,21 @@ class WeatherHere:
         self.__data = None
         self.__stations = None
         self.weather_conditions = None
+        self.output = None
 
-    def init(self, conditions: set, coords: tuple):
+    def init(self, conditions: set, coords: tuple, output: str):
         """ Inits the class when you want to, you can initiate it yourself by running set_location()
          And running set_conditions() then finally running update_data()"""
 
         self.set_conditions(conditions)  # sets conditions
         self.set_location(coords)  # sets coords
         self.update_data()
+        self.set_output(output)
 
-    def __stations_with_conditions(self, data: dict, condition_keys: set) -> list[dict]:
+    def set_output(self, output: str):
+        self.output = output
+
+    def __stations_with_conditions(self, data: dict, condition_keys: set) -> List[dict]:
         rel_stations = {}
         for condition in data["resource"]:  # Loop all all_conditions.json
             if condition["key"] in condition_keys:  # If the condition is wanted
@@ -155,14 +163,9 @@ class WeatherHere:
 
     def write_json(self):
         """ Writes data to json"""
-        with open("output.json", "w") as outfile:
+        with open(self.output, "w", encoding="utf8") as outfile:
             json.dump(self.weather_conditions, outfile, ensure_ascii=False)
-            print("Wrote to output.json")
+            print("Wrote to " + self.output)
 
 
-if __name__ == "__main__":
-    with open("input.json", "r") as inpt:
-        inpt = json.loads(inpt.read())
-        weather = WeatherHere()
-        weather.init(inpt["conditions"], inpt["coords"])
-        weather.write_json()
+

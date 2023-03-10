@@ -28,5 +28,6 @@ condition_to_key = {value: key for key, value in key_to_conditions.items()}
 
 if __name__ == "__main__":
     import json
+
     with open("all_conditions.json", "w") as file:
         json.dump(list(key_to_conditions.values()), file, ensure_ascii=False)
